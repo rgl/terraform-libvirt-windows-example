@@ -89,6 +89,7 @@ resource "libvirt_domain" "example" {
     inline = [
       "whoami /all",
       "ver",
+      "PowerShell \"Get-Disk | Select-Object Number,PartitionStyle,Size | Sort-Object Number\"",
       "PowerShell Get-Volume",
     ]
     connection {
