@@ -33,9 +33,11 @@ resource "libvirt_network" "example" {
   }
 }
 
+# create a cloudbase-init cloud-config.
+# NB this creates an iso image that will be used by the NoCloud cloudbase-init datasource.
 # see https://github.com/dmacvicar/terraform-provider-libvirt/blob/master/website/docs/r/cloudinit.html.markdown
 # see https://cloudbase-init.readthedocs.io/en/latest/userdata.html#userdata
-# see https://cloudinit.readthedocs.io/en/latest/topics/examples.html#disk-setup
+# see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.6.0/libvirt/cloudinit_def.go#L133-L162
 resource "libvirt_cloudinit_disk" "example_cloudinit" {
   name = "${var.prefix}_example_cloudinit.iso"
   user_data = <<EOF
