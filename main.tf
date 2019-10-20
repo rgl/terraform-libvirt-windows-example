@@ -95,10 +95,12 @@ resource "libvirt_domain" "example" {
   }
   provisioner "remote-exec" {
     inline = [
-      "whoami /all",
-      "ver",
-      "PowerShell \"Get-Disk | Select-Object Number,PartitionStyle,Size | Sort-Object Number\"",
-      "PowerShell Get-Volume",
+      <<-EOF
+      whoami /all
+      ver
+      PowerShell "Get-Disk | Select-Object Number,PartitionStyle,Size | Sort-Object Number"
+      PowerShell "Get-Volume | Sort-Object DriveLetter,FriendlyName"
+      EOF
     ]
     connection {
       type = "winrm"
