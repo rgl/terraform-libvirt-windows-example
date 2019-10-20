@@ -150,6 +150,7 @@ resource "libvirt_domain" "example" {
       user = var.winrm_username
       password = var.winrm_password
       host = self.network_interface[0].addresses[0] # see https://github.com/dmacvicar/terraform-provider-libvirt/issues/660
+      timeout = "1h"
     }
   }
 }
