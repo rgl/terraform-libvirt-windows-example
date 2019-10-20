@@ -71,6 +71,12 @@ resource "libvirt_domain" "example" {
   }
   vcpu = 2
   memory = 1024
+  video {
+    type = "qxl"
+  }
+  xml {
+    xslt = file("libvirt-domain.xsl")
+  }
   qemu_agent = true
   cloudinit = libvirt_cloudinit_disk.example_cloudinit.id
   disk {
