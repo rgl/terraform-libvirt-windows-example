@@ -15,7 +15,11 @@ variable "winrm_username" {
 }
 
 variable "winrm_password" {
-  default = "vagrant"
+  # set the administrator password.
+  # NB the administrator password will be reset to this value by the cloudbase-init SetUserPasswordPlugin plugin.
+  # NB this value must meet the Windows password policy requirements.
+  #    see https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/password-must-meet-complexity-requirements
+  default = "HeyH0Password"
 }
 
 # see https://github.com/dmacvicar/terraform-provider-libvirt/blob/master/website/docs/r/network.markdown
@@ -78,6 +82,11 @@ data "template_cloudinit_config" "example" {
 resource "libvirt_cloudinit_disk" "example_cloudinit" {
   name = "${var.prefix}_example_cloudinit.iso"
   user_data = data.template_cloudinit_config.example.rendered
+  meta_data = jsonencode({
+    "admin-username": var.winrm_username,
+    "admin-password": var.winrm_password,
+    "public-keys": [trimspace(file("~/.ssh/id_rsa.pub"))],
+  })
 }
 
 # this uses the vagrant windows image imported from https://github.com/rgl/windows-2016-vagrant.
