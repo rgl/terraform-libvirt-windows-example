@@ -104,11 +104,11 @@ resource "libvirt_domain" "example" {
       type = "winrm"
       user = var.winrm_username
       password = var.winrm_password
-      host = self.network_interface[0].addresses[0]
+      host = self.network_interface[0].addresses[0] # see https://github.com/dmacvicar/terraform-provider-libvirt/issues/660
     }
   }
 }
 
 output "ip" {
-  value = libvirt_domain.example.network_interface[0].addresses[0]
+  value = length(libvirt_domain.example.network_interface[0].addresses) > 0 ? libvirt_domain.example.network_interface[0].addresses[0] : ""
 }
