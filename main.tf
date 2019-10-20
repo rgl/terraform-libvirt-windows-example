@@ -33,17 +33,51 @@ resource "libvirt_network" "example" {
   }
 }
 
-# create a cloudbase-init cloud-config.
+# a multipart cloudbase-init cloud-config.
+# see https://github.com/cloudbase/cloudbase-init
+# see https://cloudbase-init.readthedocs.io/en/latest/userdata.html#userdata
+# see https://www.terraform.io/docs/providers/template/d/cloudinit_config.html
+# see https://www.terraform.io/docs/configuration/expressions.html#string-literals
+data "template_cloudinit_config" "example" {
+  gzip = false
+  base64_encode = false
+  part {
+    content_type = "text/cloud-config"
+    content = <<-EOF
+      #cloud-config
+      hostname: example
+      timezone: Asia/Tbilisi
+      EOF
+  }
+  # TODO for some reason cloudbase-init is not running this script... see why!
+  part {
+    content_type = "text/x-shellscript"
+    content = <<-EOF
+      #ps1_sysnative
+      Start-Transcript -Append "C:\cloudconfig-ps1.log"
+      Add-Content -Encoding ascii "C:\cloudconfig-ps1-add-content.log" (Get-Date)
+      function Write-Title($title) {
+        Write-Output "`n#`n# $title`n#"
+      }
+      Write-Title "whoami"
+      whoami /all
+      Write-Title "Windows version"
+      cmd /c ver
+      Write-Title "Environment Variables"
+      dir env:
+      Write-Title "TimeZone"
+      Get-TimeZone
+      EOF
+  }
+}
+
+# a cloudbase-init cloud-config disk.
 # NB this creates an iso image that will be used by the NoCloud cloudbase-init datasource.
 # see https://github.com/dmacvicar/terraform-provider-libvirt/blob/master/website/docs/r/cloudinit.html.markdown
-# see https://cloudbase-init.readthedocs.io/en/latest/userdata.html#userdata
 # see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.6.0/libvirt/cloudinit_def.go#L133-L162
 resource "libvirt_cloudinit_disk" "example_cloudinit" {
   name = "${var.prefix}_example_cloudinit.iso"
-  user_data = <<EOF
-#cloud-config
-set_hostname: example
-EOF
+  user_data = data.template_cloudinit_config.example.rendered
 }
 
 # this uses the vagrant windows image imported from https://github.com/rgl/windows-2016-vagrant.
