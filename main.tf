@@ -142,6 +142,7 @@ resource "libvirt_domain" "example" {
     inline = [
       <<-EOF
       rem this is a batch script.
+      PowerShell "(Get-Content C:/cloudinit-config-example.ps1.log) -replace '^','C:/cloudinit-config-example.ps1.log: '"
       whoami /all
       ver
       PowerShell "Get-Disk | Select-Object Number,PartitionStyle,Size | Sort-Object Number"
