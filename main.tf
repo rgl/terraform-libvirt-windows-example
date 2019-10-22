@@ -58,6 +58,9 @@ data "template_cloudinit_config" "example" {
     content_type = "text/x-shellscript"
     content = <<-EOF
       #ps1_sysnative
+      # this is a PowerShell script.
+      # NB this script will be executed as the cloudbase-init user (which is in the Administrators group).
+      # NB this script will be executed by the cloudbase-init service once, but to be safe, make sure its idempotent.
       Start-Transcript -Append "C:\cloudinit-config-example.ps1.log"
       function Write-Title($title) {
         Write-Output "`n#`n# $title`n#"
@@ -138,6 +141,7 @@ resource "libvirt_domain" "example" {
   provisioner "remote-exec" {
     inline = [
       <<-EOF
+      rem this is a batch script.
       whoami /all
       ver
       PowerShell "Get-Disk | Select-Object Number,PartitionStyle,Size | Sort-Object Number"
