@@ -53,13 +53,12 @@ data "template_cloudinit_config" "example" {
       timezone: Asia/Tbilisi
       EOF
   }
-  # TODO for some reason cloudbase-init is not running this script... see why!
   part {
+    filename = "example.ps1"
     content_type = "text/x-shellscript"
     content = <<-EOF
       #ps1_sysnative
-      Start-Transcript -Append "C:\cloudconfig-ps1.log"
-      Add-Content -Encoding ascii "C:\cloudconfig-ps1-add-content.log" (Get-Date)
+      Start-Transcript -Append "C:\cloudinit-config-example.ps1.log"
       function Write-Title($title) {
         Write-Output "`n#`n# $title`n#"
       }
@@ -81,12 +80,12 @@ data "template_cloudinit_config" "example" {
 # see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.6.0/libvirt/cloudinit_def.go#L133-L162
 resource "libvirt_cloudinit_disk" "example_cloudinit" {
   name = "${var.prefix}_example_cloudinit.iso"
-  user_data = data.template_cloudinit_config.example.rendered
   meta_data = jsonencode({
     "admin-username": var.winrm_username,
     "admin-password": var.winrm_password,
     "public-keys": [trimspace(file("~/.ssh/id_rsa.pub"))],
   })
+  user_data = data.template_cloudinit_config.example.rendered
 }
 
 # this uses the vagrant windows image imported from https://github.com/rgl/windows-2016-vagrant.
