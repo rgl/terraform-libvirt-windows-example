@@ -38,6 +38,7 @@ resource "libvirt_network" "example" {
 }
 
 # a multipart cloudbase-init cloud-config.
+# NB the parts are executed by their declared order.
 # see https://github.com/cloudbase/cloudbase-init
 # see https://cloudbase-init.readthedocs.io/en/latest/userdata.html#userdata
 # see https://www.terraform.io/docs/providers/template/d/cloudinit_config.html
@@ -45,6 +46,27 @@ resource "libvirt_network" "example" {
 data "template_cloudinit_config" "example" {
   gzip = false
   base64_encode = false
+  part {
+    filename = "initialize-disks.ps1"
+    content_type = "text/x-shellscript"
+    content = <<-EOF
+      #ps1_sysnative
+      # initialize all (non-initialized) disks with a single NTFS partition.
+      # NB we have this script because disk initialization is not yet supported by cloudbase-init.
+      # NB the output of this script appears on the cloudbase-init.log file when the
+      #    debug mode is enabled, otherwise, you will only have the exit code.
+      Get-Disk `
+        | Where-Object {$_.PartitionStyle -eq 'RAW'} `
+        | ForEach-Object {
+          Write-Host "Initializing disk #$($_.Number) ($($_.Size) bytes)..."
+          $volume = $_ `
+            | Initialize-Disk -PartitionStyle MBR -PassThru `
+            | New-Partition -AssignDriveLetter -UseMaximumSize `
+            | Format-Volume -FileSystem NTFS -NewFileSystemLabel "disk$($_.Number)" -Confirm:$false
+          Write-Host "Initialized disk #$($_.Number) ($($_.Size) bytes) as $($volume.DriveLetter):."
+        }
+      EOF
+  }
   part {
     content_type = "text/cloud-config"
     content = <<-EOF
@@ -61,6 +83,8 @@ data "template_cloudinit_config" "example" {
       # this is a PowerShell script.
       # NB this script will be executed as the cloudbase-init user (which is in the Administrators group).
       # NB this script will be executed by the cloudbase-init service once, but to be safe, make sure its idempotent.
+      # NB the output of this script appears on the cloudbase-init.log file when the
+      #    debug mode is enabled, otherwise, you will only have the exit code.
       Start-Transcript -Append "C:\cloudinit-config-example.ps1.log"
       function Write-Title($title) {
         Write-Output "`n#`n# $title`n#"
