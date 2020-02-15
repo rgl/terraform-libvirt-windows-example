@@ -1,18 +1,19 @@
-# Usage (Ubuntu 18.04)
+# Usage (Ubuntu 18.04 host)
 
 Install Terraform:
 
 ```bash
-wget https://releases.hashicorp.com/terraform/0.12.9/terraform_0.12.9_linux_amd64.zip
-unzip terraform_0.12.9_linux_amd64.zip
-sudo cp terraform /usr/local/bin
+wget https://releases.hashicorp.com/terraform/0.12.20/terraform_0.12.20_linux_amd64.zip
+unzip terraform_0.12.20_linux_amd64.zip
+sudo install terraform /usr/local/bin
+rm terraform
 ```
 
 Install the [terraform libvirt provider](https://github.com/dmacvicar/terraform-provider-libvirt):
 
 ```bash
-wget https://github.com/dmacvicar/terraform-provider-libvirt/releases/download/v0.6.0/terraform-provider-libvirt-0.6.0+git.1569597268.1c8597df.Ubuntu_18.04.amd64.tar.gz
-tar xf terraform-provider-libvirt-0.6.0+git.1569597268.1c8597df.Ubuntu_18.04.amd64.tar.gz
+wget https://github.com/dmacvicar/terraform-provider-libvirt/releases/download/v0.6.1/terraform-provider-libvirt-0.6.1+git.1578064534.db13b678.Ubuntu_18.04.amd64.tar.gz
+tar xf terraform-provider-libvirt-0.6.1+git.1578064534.db13b678.Ubuntu_18.04.amd64.tar.gz
 install -d ~/.terraform.d/plugins/linux_amd64
 install terraform-provider-libvirt ~/.terraform.d/plugins/linux_amd64/
 rm terraform-provider-libvirt

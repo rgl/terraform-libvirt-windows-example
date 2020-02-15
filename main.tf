@@ -115,7 +115,7 @@ resource "libvirt_cloudinit_disk" "example_cloudinit" {
   user_data = data.template_cloudinit_config.example.rendered
 }
 
-# this uses the vagrant windows image imported from https://github.com/rgl/windows-2016-vagrant.
+# this uses the vagrant windows image imported from https://github.com/rgl/windows-vagrant.
 # see https://github.com/dmacvicar/terraform-provider-libvirt/blob/master/website/docs/r/volume.html.markdown
 resource "libvirt_volume" "example_root" {
   name = "${var.prefix}_root.img"
