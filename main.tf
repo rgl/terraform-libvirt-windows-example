@@ -73,6 +73,20 @@ data "template_cloudinit_config" "example" {
       #cloud-config
       hostname: example
       timezone: Asia/Tbilisi
+      # these runcmd commands are concatenated together in a single batch script and then executed by cmd.exe.
+      # NB this script will be executed as the cloudbase-init user (which is in the Administrators group).
+      # NB this script will be executed by the cloudbase-init service once, but to be safe, make sure its idempotent.
+      # NB the output of this script appears on the cloudbase-init.log file when the
+      #    debug mode is enabled, otherwise, you will only have the exit code.
+      runcmd:
+        - "echo # Script path"
+        - "echo %~f0"
+        - "echo # whoami"
+        - "whoami /all"
+        - "echo # Windows version"
+        - "ver"
+        - "echo # Environment variables"
+        - "set"
       EOF
   }
   part {
@@ -89,6 +103,8 @@ data "template_cloudinit_config" "example" {
       function Write-Title($title) {
         Write-Output "`n#`n# $title`n#"
       }
+      Write-Title "Script path"
+      Write-Output $PSCommandPath
       Write-Title "whoami"
       whoami /all
       Write-Title "Windows version"
