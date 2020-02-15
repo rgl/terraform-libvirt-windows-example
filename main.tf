@@ -110,7 +110,9 @@ resource "libvirt_cloudinit_disk" "example_cloudinit" {
   meta_data = jsonencode({
     "admin-username": var.winrm_username,
     "admin-password": var.winrm_password,
-    "public-keys": [trimspace(file("~/.ssh/id_rsa.pub"))],
+    "public-keys": {
+      "host": {"openssh-key": trimspace(file("~/.ssh/id_rsa.pub"))},
+    }
   })
   user_data = data.template_cloudinit_config.example.rendered
 }
