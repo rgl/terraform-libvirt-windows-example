@@ -36,6 +36,11 @@ variable "winrm_password" {
   default = "HeyH0Password"
 }
 
+# NB this generates a single random number for the cloud-init instance-id.
+resource "random_id" "example" {
+  byte_length = 10
+}
+
 # see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.6.2/website/docs/r/network.markdown
 resource "libvirt_network" "example" {
   name = var.prefix
@@ -88,6 +93,12 @@ data "template_cloudinit_config" "example" {
       #cloud-config
       hostname: example
       timezone: Asia/Tbilisi
+      users:
+        - name: ${jsonencode(var.winrm_username)}
+          passwd: ${jsonencode(var.winrm_password)}
+          primary_group: Administrators
+          ssh_authorized_keys:
+            - ${jsonencode(trimspace(file("~/.ssh/id_rsa.pub")))}
       # these runcmd commands are concatenated together in a single batch script and then executed by cmd.exe.
       # NB this script will be executed as the cloudbase-init user (which is in the Administrators group).
       # NB this script will be executed by the cloudbase-init service once, but to be safe, make sure its idempotent.
@@ -121,9 +132,9 @@ data "template_cloudinit_config" "example" {
       Write-Title "Script path"
       Write-Output $PSCommandPath
       Write-Title "whoami"
-      whoami /all
+      whoami /all | Out-String
       Write-Title "Windows version"
-      cmd /c ver
+      cmd /c ver | Out-String
       Write-Title "Environment Variables"
       dir env:
       Write-Title "TimeZone"
@@ -139,11 +150,7 @@ data "template_cloudinit_config" "example" {
 resource "libvirt_cloudinit_disk" "example_cloudinit" {
   name = "${var.prefix}_example_cloudinit.iso"
   meta_data = jsonencode({
-    "admin-username": var.winrm_username,
-    "admin-password": var.winrm_password,
-    "public-keys": {
-      "host": {"openssh-key": trimspace(file("~/.ssh/id_rsa.pub"))},
-    }
+    "instance-id": random_id.example.hex,
   })
   user_data = data.template_cloudinit_config.example.rendered
 }
