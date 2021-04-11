@@ -108,6 +108,8 @@ data "template_cloudinit_config" "example" {
       runcmd:
         - "echo # Script path"
         - "echo %~f0"
+        - "echo # Sessions"
+        - "query session"
         - "echo # whoami"
         - "whoami /all"
         - "echo # Windows version"
@@ -132,6 +134,8 @@ data "template_cloudinit_config" "example" {
       }
       Write-Title "Script path"
       Write-Output $PSCommandPath
+      Write-Title "Sessions"
+      query session | Out-String
       Write-Title "whoami"
       whoami /all | Out-String
       Write-Title "Windows version"
@@ -208,6 +212,7 @@ resource "libvirt_domain" "example" {
       <<-EOF
       rem this is a batch script.
       PowerShell "(Get-Content C:/cloudinit-config-example.ps1.log) -replace '^','C:/cloudinit-config-example.ps1.log: '"
+      query session
       whoami /all
       ver
       PowerShell "Get-Disk | Select-Object Number,PartitionStyle,Size | Sort-Object Number"
