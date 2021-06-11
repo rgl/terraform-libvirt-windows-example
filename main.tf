@@ -168,7 +168,7 @@ resource "libvirt_cloudinit_disk" "example_cloudinit" {
 # see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.6.3/website/docs/r/volume.html.markdown
 resource "libvirt_volume" "example_root" {
   name = "${var.prefix}_root.img"
-  base_volume_name = "windows-2019-amd64_vagrant_box_image_0.img"
+  base_volume_name = "windows-2019-amd64_vagrant_box_image_0_box.img"
   format = "qcow2"
   size = 66*1024*1024*1024 # 66GiB. this root FS is automatically resized by cloudbase-init (by its cloudbaseinit.plugins.windows.extendvolumes.ExtendVolumesPlugin plugin which is included in the rgl/windows-vagrant image).
 }
