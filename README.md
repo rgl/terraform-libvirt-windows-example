@@ -2,6 +2,8 @@
 
 **NB** For using Ansible as a provisioner see the [rgl/terraform-libvirt-ansible-windows-example repository](https://github.com/rgl/terraform-libvirt-ansible-windows-example).
 
+Create and install the [base Windows 2019 vagrant box](https://github.com/rgl/windows-vagrant).
+
 Install Terraform:
 
 ```bash
