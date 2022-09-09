@@ -16,7 +16,7 @@ terraform {
     # see https://github.com/dmacvicar/terraform-provider-libvirt
     libvirt = {
       source = "dmacvicar/libvirt"
-      version = "0.6.10"
+      version = "0.6.14"
     }
   }
 }
@@ -47,7 +47,7 @@ resource "random_id" "example" {
   byte_length = 10
 }
 
-# see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.6.10/website/docs/r/network.markdown
+# see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.6.14/website/docs/r/network.markdown
 resource "libvirt_network" "example" {
   name = var.prefix
   mode = "nat"
@@ -155,8 +155,8 @@ data "template_cloudinit_config" "example" {
 
 # a cloudbase-init cloud-config disk.
 # NB this creates an iso image that will be used by the NoCloud cloudbase-init datasource.
-# see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.6.10/website/docs/r/cloudinit.html.markdown
-# see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.6.10/libvirt/cloudinit_def.go#L138-L167
+# see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.6.14/website/docs/r/cloudinit.html.markdown
+# see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.6.14/libvirt/cloudinit_def.go#L138-L167
 resource "libvirt_cloudinit_disk" "example_cloudinit" {
   name = "${var.prefix}_example_cloudinit.iso"
   meta_data = jsonencode({
@@ -166,26 +166,26 @@ resource "libvirt_cloudinit_disk" "example_cloudinit" {
 }
 
 # this uses the vagrant windows image imported from https://github.com/rgl/windows-vagrant.
-# see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.6.10/website/docs/r/volume.html.markdown
+# see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.6.14/website/docs/r/volume.html.markdown
 resource "libvirt_volume" "example_root" {
   name = "${var.prefix}_root.img"
-  base_volume_name = "windows-2019-amd64_vagrant_box_image_0_box.img"
+  base_volume_name = "windows-2019-amd64_vagrant_box_image_0_1661713559_box.img"
   format = "qcow2"
   size = 66*1024*1024*1024 # 66GiB. this root FS is automatically resized by cloudbase-init (by its cloudbaseinit.plugins.windows.extendvolumes.ExtendVolumesPlugin plugin which is included in the rgl/windows-vagrant image).
 }
 
 # a data disk.
-# see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.6.10/website/docs/r/volume.html.markdown
+# see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.6.14/website/docs/r/volume.html.markdown
 resource "libvirt_volume" "example_data" {
   name = "${var.prefix}_data.img"
   format = "qcow2"
   size = 6*1024*1024*1024 # 6GiB.
 }
 
-# see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.6.10/website/docs/r/domain.html.markdown
+# see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.6.14/website/docs/r/domain.html.markdown
 resource "libvirt_domain" "example" {
   name = var.prefix
-  cpu = {
+  cpu {
     mode = "host-passthrough"
   }
   vcpu = 2
