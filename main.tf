@@ -54,7 +54,7 @@ resource "libvirt_network" "example" {
   domain = "example.test"
   addresses = ["10.17.3.0/24"]
   dhcp {
-    enabled = true
+    enabled = false # see https://github.com/dmacvicar/terraform-provider-libvirt/issues/998
   }
   dns {
     enabled = true
@@ -208,7 +208,6 @@ resource "libvirt_domain" "example" {
   }
   network_interface {
     network_id = libvirt_network.example.id
-    wait_for_lease = true
     hostname = "example"
     addresses = ["10.17.3.2"]
   }
