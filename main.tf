@@ -185,6 +185,7 @@ resource "libvirt_volume" "example_data" {
 # see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.7.1/website/docs/r/domain.html.markdown
 resource "libvirt_domain" "example" {
   name = var.prefix
+  machine = "q35"
   cpu {
     mode = "host-passthrough"
   }
@@ -200,11 +201,11 @@ resource "libvirt_domain" "example" {
   cloudinit = libvirt_cloudinit_disk.example_cloudinit.id
   disk {
     volume_id = libvirt_volume.example_root.id
-    scsi = false
+    scsi = true
   }
   disk {
     volume_id = libvirt_volume.example_data.id
-    scsi = false
+    scsi = true
   }
   network_interface {
     network_id = libvirt_network.example.id
@@ -230,6 +231,12 @@ resource "libvirt_domain" "example" {
       host = self.network_interface[0].addresses[0] # see https://github.com/dmacvicar/terraform-provider-libvirt/issues/660
       timeout = "1h"
     }
+  }
+  lifecycle {
+    ignore_changes = [
+      disk[0].wwn,
+      disk[1].wwn,
+    ]
   }
 }
 

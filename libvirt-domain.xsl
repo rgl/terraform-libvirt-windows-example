@@ -13,6 +13,11 @@
       <xsl:apply-templates select="node()|@*"/>
     </xsl:copy>
   </xsl:template>
+  <xsl:template match="/domain/devices/disk[@device='cdrom']/target/@bus">
+    <xsl:attribute name="bus">
+      <xsl:value-of select="'scsi'"/>
+    </xsl:attribute>
+  </xsl:template>
   <xsl:template match="/domain/devices">
     <xsl:copy>
       <xsl:apply-templates select="node()|@*"/>
