@@ -42,6 +42,11 @@ variable "winrm_password" {
   default = "HeyH0Password"
 }
 
+locals {
+  ip_network = "10.17.3.0/24"
+  ip_address = cidrhost(local.ip_network, 2)
+}
+
 # NB this generates a single random number for the cloud-init instance-id.
 resource "random_id" "example" {
   byte_length = 10
@@ -52,7 +57,7 @@ resource "libvirt_network" "example" {
   name = var.prefix
   mode = "nat"
   domain = "example.test"
-  addresses = ["10.17.3.0/24"]
+  addresses = [local.ip_network]
   dhcp {
     enabled = false # see https://github.com/dmacvicar/terraform-provider-libvirt/issues/998
   }
@@ -210,7 +215,7 @@ resource "libvirt_domain" "example" {
   network_interface {
     network_id = libvirt_network.example.id
     hostname = "example"
-    addresses = ["10.17.3.2"]
+    addresses = [local.ip_address]
   }
   provisioner "remote-exec" {
     inline = [
@@ -228,7 +233,7 @@ resource "libvirt_domain" "example" {
       type = "winrm"
       user = var.winrm_username
       password = var.winrm_password
-      host = self.network_interface[0].addresses[0] # see https://github.com/dmacvicar/terraform-provider-libvirt/issues/660
+      host = local.ip_address
       timeout = "1h"
     }
   }
@@ -241,5 +246,5 @@ resource "libvirt_domain" "example" {
 }
 
 output "ip" {
-  value = length(libvirt_domain.example.network_interface[0].addresses) > 0 ? libvirt_domain.example.network_interface[0].addresses[0] : ""
+  value = local.ip_address
 }
