@@ -59,11 +59,16 @@ resource "libvirt_network" "example" {
   domain = "example.test"
   addresses = [local.ip_network]
   dhcp {
-    enabled = false # see https://github.com/dmacvicar/terraform-provider-libvirt/issues/998
+    enabled = false
   }
   dns {
     enabled = true
     local_only = false
+  }
+  lifecycle {
+    ignore_changes = [
+      dhcp[0].enabled, # see https://github.com/dmacvicar/terraform-provider-libvirt/issues/998
+    ]
   }
 }
 
