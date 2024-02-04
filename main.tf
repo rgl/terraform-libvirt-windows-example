@@ -5,7 +5,7 @@ terraform {
     # see https://registry.terraform.io/providers/hashicorp/random
     random = {
       source  = "hashicorp/random"
-      version = "3.5.1"
+      version = "3.6.0"
     }
     # see https://registry.terraform.io/providers/hashicorp/template
     template = {
