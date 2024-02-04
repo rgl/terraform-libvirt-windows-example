@@ -179,7 +179,7 @@ resource "libvirt_cloudinit_disk" "example_cloudinit" {
 # see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.7.6/website/docs/r/volume.html.markdown
 resource "libvirt_volume" "example_root" {
   name             = "${var.prefix}_root.img"
-  base_volume_name = "windows-2022-amd64_vagrant_box_image_0.0.0_box_0.img"
+  base_volume_name = "windows-2022-uefi-amd64_vagrant_box_image_0.0.0_box_0.img"
   format           = "qcow2"
   size             = 66 * 1024 * 1024 * 1024 # 66GiB. this root FS is automatically resized by cloudbase-init (by its cloudbaseinit.plugins.windows.extendvolumes.ExtendVolumesPlugin plugin which is included in the rgl/windows-vagrant image).
 }
@@ -194,8 +194,9 @@ resource "libvirt_volume" "example_data" {
 
 # see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.7.6/website/docs/r/domain.html.markdown
 resource "libvirt_domain" "example" {
-  name    = var.prefix
-  machine = "q35"
+  name     = var.prefix
+  machine  = "q35"
+  firmware = "/usr/share/OVMF/OVMF_CODE.fd"
   cpu {
     mode = "host-passthrough"
   }
@@ -245,6 +246,7 @@ resource "libvirt_domain" "example" {
   }
   lifecycle {
     ignore_changes = [
+      nvram,
       disk[0].wwn,
       disk[1].wwn,
     ]
