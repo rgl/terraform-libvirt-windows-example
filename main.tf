@@ -3,14 +3,16 @@ terraform {
   required_version = "1.8.5"
   required_providers {
     # see https://registry.terraform.io/providers/hashicorp/random
+    # see https://github.com/hashicorp/terraform-provider-random
     random = {
       source  = "hashicorp/random"
       version = "3.6.2"
     }
-    # see https://registry.terraform.io/providers/hashicorp/template
-    template = {
-      source  = "hashicorp/template"
-      version = "2.2.0"
+    # see https://registry.terraform.io/providers/hashicorp/cloudinit
+    # see https://github.com/hashicorp/terraform-provider-cloudinit
+    cloudinit = {
+      source  = "hashicorp/cloudinit"
+      version = "2.3.4"
     }
     # see https://registry.terraform.io/providers/dmacvicar/libvirt
     # see https://github.com/dmacvicar/terraform-provider-libvirt
@@ -77,9 +79,9 @@ resource "libvirt_network" "example" {
 # see https://github.com/cloudbase/cloudbase-init
 # see https://cloudbase-init.readthedocs.io/en/1.1.2/userdata.html#cloud-config
 # see https://cloudbase-init.readthedocs.io/en/1.1.2/userdata.html#userdata
-# see https://www.terraform.io/docs/providers/template/d/cloudinit_config.html
+# see https://registry.terraform.io/providers/hashicorp/cloudinit/latest/docs/data-sources/config
 # see https://www.terraform.io/docs/configuration/expressions.html#string-literals
-data "template_cloudinit_config" "example" {
+data "cloudinit_config" "example" {
   gzip          = false
   base64_encode = false
   part {
@@ -172,7 +174,7 @@ resource "libvirt_cloudinit_disk" "example_cloudinit" {
   meta_data = jsonencode({
     "instance-id" : random_id.example.hex,
   })
-  user_data = data.template_cloudinit_config.example.rendered
+  user_data = data.cloudinit_config.example.rendered
 }
 
 # this uses the vagrant windows image imported from https://github.com/rgl/windows-vagrant.
