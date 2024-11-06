@@ -31,8 +31,25 @@ virsh qemu-agent-command terraform_example '{"execute":"guest-info"}' --pretty
 virsh qemu-agent-command terraform_example '{"execute":"guest-network-get-interfaces"}' --pretty
 ./qemu-agent-guest-exec terraform_example winrm enumerate winrm/config/listener
 ./qemu-agent-guest-exec terraform_example winrm get winrm/config
+```
+
+Login into the machine using SSH:
+
+```bash
 ssh-keygen -f ~/.ssh/known_hosts -R "$(terraform output --raw ip)"
 ssh "vagrant@$(terraform output --raw ip)"
+exit # ssh
+```
+
+Login into the machine using PowerShell Remoting over SSH:
+
+```bash
+pwsh
+Enter-PSSession -HostName "vagrant@$(terraform output --raw ip)"
+$PSVersionTable
+whoami /all
+exit # Enter-PSSession
+exit # pwsh
 ```
 
 Destroy the infrastructure:
