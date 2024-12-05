@@ -7,8 +7,8 @@ Create and install the [UEFI Windows 2022 vagrant box](https://github.com/rgl/wi
 Install Terraform:
 
 ```bash
-wget https://releases.hashicorp.com/terraform/1.9.8/terraform_1.9.8_linux_amd64.zip
-unzip terraform_1.9.8_linux_amd64.zip
+wget https://releases.hashicorp.com/terraform/1.10.5/terraform_1.10.5_linux_amd64.zip
+unzip terraform_1.10.5_linux_amd64.zip
 sudo install terraform /usr/local/bin
 rm terraform terraform_*_linux_amd64.zip
 ```
