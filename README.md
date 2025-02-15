@@ -38,6 +38,8 @@ Login into the machine using SSH:
 ```bash
 ssh-keygen -f ~/.ssh/known_hosts -R "$(terraform output --raw ip)"
 ssh "vagrant@$(terraform output --raw ip)"
+sshd -V # show the sshd version.
+ssh -V  # show the ssh version.
 exit # ssh
 ```
 
