@@ -44,6 +44,13 @@ variable "winrm_password" {
   default = "HeyH0Password"
 }
 
+# NB this uses the vagrant windows image imported from https://github.com/rgl/windows-vagrant.
+variable "base_volume_name" {
+  default = "windows-2022-uefi-amd64_vagrant_box_image_0.0.0_box_0.img"
+  # default = "windows-2025-uefi-amd64_vagrant_box_image_0.0.0_box_0.img"
+  # default = "windows-11-24h2-uefi-amd64_vagrant_box_image_0.0.0_box_0.img"
+}
+
 locals {
   ip_network = "10.17.3.0/24"
   ip_address = cidrhost(local.ip_network, 2)
@@ -177,11 +184,10 @@ resource "libvirt_cloudinit_disk" "example_cloudinit" {
   user_data = data.cloudinit_config.example.rendered
 }
 
-# this uses the vagrant windows image imported from https://github.com/rgl/windows-vagrant.
 # see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.8.1/website/docs/r/volume.html.markdown
 resource "libvirt_volume" "example_root" {
   name             = "${var.prefix}_root.img"
-  base_volume_name = "windows-2022-uefi-amd64_vagrant_box_image_0.0.0_box_0.img"
+  base_volume_name = var.base_volume_name
   format           = "qcow2"
   size             = 66 * 1024 * 1024 * 1024 # 66GiB. this root FS is automatically resized by cloudbase-init (by its cloudbaseinit.plugins.windows.extendvolumes.ExtendVolumesPlugin plugin which is included in the rgl/windows-vagrant image).
 }
