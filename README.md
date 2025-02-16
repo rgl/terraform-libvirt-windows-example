@@ -4,14 +4,14 @@
 
 Create and install the [UEFI Windows 2022 vagrant box](https://github.com/rgl/windows-vagrant).
 
-Install Terraform:
+Install the dependencies:
 
-```bash
-wget https://releases.hashicorp.com/terraform/1.10.5/terraform_1.10.5_linux_amd64.zip
-unzip terraform_1.10.5_linux_amd64.zip
-sudo install terraform /usr/local/bin
-rm terraform terraform_*_linux_amd64.zip
-```
+* [Visual Studio Code](https://code.visualstudio.com).
+* [Dev Container plugin](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
+
+Open this directory with the Dev Container plugin.
+
+Open `bash` inside the Visual Studio Code Terminal.
 
 Create the infrastructure:
 
