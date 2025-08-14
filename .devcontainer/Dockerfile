@@ -74,3 +74,5 @@ sed -i '0,/esac/s/esac/&\n\nsource \/etc\/profile/' /home/vscode/.bashrc
 EOF
 COPY inputrc /etc/inputrc
 COPY login.sh /etc/profile.d/login.sh
+
+ENV LIBVIRT_DEFAULT_URI='qemu:///system'
