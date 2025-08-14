@@ -8,8 +8,9 @@
     // default datasources.
     {
       "fileMatch": [
-        "^(roles|.github)/.+\\.yml$",
-        "renovate\\.sh"
+        "\\.ya?ml$",
+        "\\.sh$",
+        "Dockerfile",
       ],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>[^:]+?) depName=(?<depName>.+?)( versioning=(?<versioning>.+?))?( extractVersion=(?<extractVersion>.+?))?( registryUrl=(?<registryUrl>.+?))?\\s.+?[:=]\\s*[\"']?(?<currentValue>.+?)[\"']?\\s"
@@ -17,11 +18,25 @@
       "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver-coerced{{/if}}",
       "extractVersionTemplate": "{{#if extractVersion}}{{{extractVersion}}}{{else}}^v?(?<version>.+)${{/if}}"
     },
+    // deb:microsoft datasource.
+    {
+      "fileMatch": [
+        "\\.ya?ml$",
+        "\\.sh$",
+        "Dockerfile",
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>deb):microsoft depName=(?<depName>.+?)( versioning=(?<versioning>.+?))?( extractVersion=(?<extractVersion>.+?))?( registryUrl=(?<registryUrl>.+?))?\\s.+?[:=]\\s*[\"']?(?<currentValue>.+?)[\"']?\\s"
+      ],
+      "registryUrlTemplate": "{{#if registryUrl}}{{{registryUrl}}}{{else}}https://packages.microsoft.com/repos/microsoft-debian-bookworm-prod?suite=bookworm&components=main&binaryArch=amd64{{/if}}",
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}deb{{/if}}",
+      "extractVersionTemplate": "{{#if extractVersion}}{{{extractVersion}}}{{else}}^(?<version>.+?)(-1\\.deb)?${{/if}}"
+    },
     // nuget:powershellgallery datasource.
     {
       "fileMatch": [
-        "^roles/.+\\.yml$",
-        "renovate\\.sh"
+        "\\.ya?ml$",
+        "\\.sh$",
       ],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>nuget):powershellgallery depName=(?<depName>.+?)( versioning=(?<versioning>.+?))?( extractVersion=(?<extractVersion>.+?))?( registryUrl=(?<registryUrl>.+?))?\\s.+?[:=]\\s*[\"']?(?<currentValue>.+?)[\"']?\\s"
