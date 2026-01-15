@@ -51,9 +51,13 @@ variable "base_volume_name" {
   # default = "windows-11-24h2-uefi-amd64_vagrant_box_image_0.0.0_box_0.img"
 }
 
+variable "network_cidr" {
+  type    = string
+  default = "10.17.5.0/24"
+}
+
 locals {
-  ip_network = "10.17.3.0/24"
-  ip_address = cidrhost(local.ip_network, 2)
+  ip_address = cidrhost(var.network_cidr, 2)
 }
 
 # NB this generates a single random number for the cloud-init instance-id.
@@ -66,7 +70,7 @@ resource "libvirt_network" "example" {
   name      = var.prefix
   mode      = "nat"
   domain    = "example.test"
-  addresses = [local.ip_network]
+  addresses = [var.network_cidr]
   dhcp {
     enabled = false
   }
