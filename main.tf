@@ -1,12 +1,12 @@
 # see https://github.com/hashicorp/terraform
 terraform {
-  required_version = "1.12.2"
+  required_version = "1.14.3"
   required_providers {
     # see https://registry.terraform.io/providers/hashicorp/random
     # see https://github.com/hashicorp/terraform-provider-random
     random = {
       source  = "hashicorp/random"
-      version = "3.7.2"
+      version = "3.8.0"
     }
     # see https://registry.terraform.io/providers/hashicorp/cloudinit
     # see https://github.com/hashicorp/terraform-provider-cloudinit
@@ -204,7 +204,7 @@ resource "libvirt_volume" "example_data" {
 resource "libvirt_domain" "example" {
   name     = var.prefix
   machine  = "q35"
-  firmware = "/usr/share/OVMF/OVMF_CODE.fd"
+  firmware = "/usr/share/OVMF/OVMF_CODE_4M.fd"
   cpu {
     mode = "host-passthrough"
   }
