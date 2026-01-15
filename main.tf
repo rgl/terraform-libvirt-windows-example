@@ -28,7 +28,7 @@ provider "libvirt" {
 }
 
 variable "prefix" {
-  default = "terraform_example"
+  default = "terraform-windows-example"
 }
 
 variable "winrm_username" {
@@ -181,7 +181,7 @@ data "cloudinit_config" "example" {
 # see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.8.3/website/docs/r/cloudinit.html.markdown
 # see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.8.3/libvirt/cloudinit_def.go#L139-L168
 resource "libvirt_cloudinit_disk" "example_cloudinit" {
-  name = "${var.prefix}_example_cloudinit.iso"
+  name = "${var.prefix}-cloudinit.iso"
   meta_data = jsonencode({
     "instance-id" : random_id.example.hex,
   })
@@ -190,7 +190,7 @@ resource "libvirt_cloudinit_disk" "example_cloudinit" {
 
 # see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.8.3/website/docs/r/volume.html.markdown
 resource "libvirt_volume" "example_root" {
-  name             = "${var.prefix}_root.img"
+  name             = "${var.prefix}-root.img"
   base_volume_name = var.base_volume_name
   format           = "qcow2"
   size             = 66 * 1024 * 1024 * 1024 # 66GiB. this root FS is automatically resized by cloudbase-init (by its cloudbaseinit.plugins.windows.extendvolumes.ExtendVolumesPlugin plugin which is included in the rgl/windows-vagrant image).
@@ -199,7 +199,7 @@ resource "libvirt_volume" "example_root" {
 # a data disk.
 # see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.8.3/website/docs/r/volume.html.markdown
 resource "libvirt_volume" "example_data" {
-  name   = "${var.prefix}_data.img"
+  name   = "${var.prefix}-data.img"
   format = "qcow2"
   size   = 6 * 1024 * 1024 * 1024 # 6GiB.
 }

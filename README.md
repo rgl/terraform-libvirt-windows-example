@@ -21,16 +21,16 @@ terraform plan -out=tfplan
 time terraform apply tfplan
 ```
 
-**NB** if you have errors alike `Could not open '/var/lib/libvirt/images/terraform_example_root.img': Permission denied'` you need to reconfigure libvirt by setting `security_driver = "none"` in `/etc/libvirt/qemu.conf` and restart libvirt with `sudo systemctl restart libvirtd`.
+**NB** if you have errors alike `Could not open '/var/lib/libvirt/images/terraform-windows-example-root.img': Permission denied'` you need to reconfigure libvirt by setting `security_driver = "none"` in `/etc/libvirt/qemu.conf` and restart libvirt with `sudo systemctl restart libvirtd`.
 
 Show information about the libvirt/qemu guest:
 
 ```bash
-virsh dumpxml terraform_example
-virsh qemu-agent-command terraform_example '{"execute":"guest-info"}' --pretty
-virsh qemu-agent-command terraform_example '{"execute":"guest-network-get-interfaces"}' --pretty
-./qemu-agent-guest-exec terraform_example winrm enumerate winrm/config/listener
-./qemu-agent-guest-exec terraform_example winrm get winrm/config
+virsh dumpxml terraform-windows-example
+virsh qemu-agent-command terraform-windows-example '{"execute":"guest-info"}' --pretty
+virsh qemu-agent-command terraform-windows-example '{"execute":"guest-network-get-interfaces"}' --pretty
+./qemu-agent-guest-exec terraform-windows-example winrm enumerate winrm/config/listener
+./qemu-agent-guest-exec terraform-windows-example winrm get winrm/config
 ```
 
 Login into the machine using SSH:
