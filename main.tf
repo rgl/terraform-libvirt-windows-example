@@ -60,6 +60,19 @@ locals {
   ip_address = cidrhost(var.network_cidr, 2)
 }
 
+# see https://gitlab.com/libosinfo/osinfo-db/-/blob/main/data/os/microsoft.com/win-2k22.xml.in
+# see https://gitlab.com/libosinfo/osinfo-db/-/blob/main/data/os/microsoft.com/win-2k25.xml.in
+# see https://gitlab.com/libosinfo/osinfo-db/-/blob/main/data/os/microsoft.com/win-11.xml.in
+locals {
+  windows_version = regex("windows-([^-]+)", var.base_volume_name)[0]
+  windows_version_to_os_map = {
+    "2022" = "2k22"
+    "2025" = "2k25"
+    "11"   = "11"
+  }
+  os_id = "http://microsoft.com/win/${lookup(local.windows_version_to_os_map, local.windows_version, "2k22")}"
+}
+
 # NB this generates a single random number for the cloud-init instance-id.
 resource "random_id" "example" {
   byte_length = 10
@@ -219,7 +232,9 @@ resource "libvirt_domain" "example" {
     type = "qxl"
   }
   xml {
-    xslt = file("libvirt-domain.xsl")
+    xslt = templatefile("libvirt-domain.xsl.tpl", {
+      os_id = local.os_id
+    })
   }
   qemu_agent = true
   cloudinit  = libvirt_cloudinit_disk.example_cloudinit.id
