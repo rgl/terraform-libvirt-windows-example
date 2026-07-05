@@ -23,6 +23,12 @@
       </libosinfo:libosinfo>
     </metadata>
   </xsl:template>
+  <xsl:template match="/domain/features">
+    <xsl:copy>
+      <xsl:apply-templates select="node()|@*"/>
+      <hyperv mode="passthrough"></hyperv>
+    </xsl:copy>
+  </xsl:template>
   <xsl:template match="/domain/devices/disk[@device='cdrom']/target/@bus">
     <xsl:attribute name="bus">
       <xsl:value-of select="'scsi'"/>
