@@ -214,7 +214,7 @@ resource "libvirt_domain" "example" {
     mode = "host-passthrough"
   }
   vcpu   = 2
-  memory = 1024
+  memory = 2 * 1024
   video {
     type = "qxl"
   }
