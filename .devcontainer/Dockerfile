@@ -1,16 +1,16 @@
-# syntax=docker.io/docker/dockerfile:1.25
+# syntax=docker.io/docker/dockerfile:1.26
 
 # see https://github.com/PowerShell/PowerShell/releases
 # renovate: datasource=deb:microsoft depName=powershell extractVersion=^(?<version>7\.6\..+)-1\.deb$
-ARG POWERSHELL_VERSION='7.6.3'
+ARG POWERSHELL_VERSION='7.6.5'
 
 # see https://github.com/hashicorp/terraform/releases
 # renovate: datasource=github-releases depName=hashicorp/terraform
-ARG TERRAFORM_VERSION='1.15.7'
+ARG TERRAFORM_VERSION='1.16.0'
 
 # see https://github.com/devcontainers/images/tree/main/src/base-debian/manifest.json
 # see https://github.com/devcontainers/images/tree/main/src/base-debian/history
-FROM mcr.microsoft.com/devcontainers/base:2.1.10-bookworm
+FROM mcr.microsoft.com/devcontainers/base:2.1.15-bookworm
 
 RUN <<'EOF'
 #!/usr/bin/bash
