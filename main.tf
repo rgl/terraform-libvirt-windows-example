@@ -1,6 +1,6 @@
 # see https://github.com/hashicorp/terraform
 terraform {
-  required_version = "1.16.0"
+  required_version = "1.16.1"
   required_providers {
     # see https://registry.terraform.io/providers/hashicorp/random
     # see https://github.com/hashicorp/terraform-provider-random
@@ -34,14 +34,17 @@ provider "libvirt" {
 }
 
 variable "prefix" {
+  type    = string
   default = "terraform-windows-example"
 }
 
 variable "winrm_username" {
+  type    = string
   default = "vagrant"
 }
 
 variable "winrm_password" {
+  type      = string
   sensitive = true
   # set the administrator password.
   # NB the administrator password will be reset to this value by the cloudbase-init SetUserPasswordPlugin plugin.
@@ -52,6 +55,7 @@ variable "winrm_password" {
 
 # NB this uses the vagrant windows image imported from https://github.com/rgl/windows-vagrant.
 variable "base_volume_name" {
+  type    = string
   default = "windows-2022-uefi-amd64_vagrant_box_image_0.0.0_box_0.img"
   # default = "windows-2025-uefi-amd64_vagrant_box_image_0.0.0_box_0.img"
   # default = "windows-11-24h2-uefi-amd64_vagrant_box_image_0.0.0_box_0.img"
@@ -132,8 +136,8 @@ resource "libvirt_network" "example" {
 # a multipart cloudbase-init cloud-config.
 # NB the parts are executed by their declared order.
 # see https://github.com/cloudbase/cloudbase-init
-# see https://cloudbase-init.readthedocs.io/en/1.1.2/userdata.html#cloud-config
-# see https://cloudbase-init.readthedocs.io/en/1.1.2/userdata.html#userdata
+# see https://cloudbase-init.readthedocs.io/en/1.1.8/userdata.html#cloud-config
+# see https://cloudbase-init.readthedocs.io/en/1.1.8/userdata.html#userdata
 # see https://registry.terraform.io/providers/hashicorp/cloudinit/latest/docs/data-sources/config
 # see https://www.terraform.io/docs/configuration/expressions.html#string-literals
 data "cloudinit_config" "example" {
@@ -245,7 +249,7 @@ resource "libvirt_volume" "example_cloudinit" {
   }
 }
 
-# this uses the vagrant debian image imported from https://github.com/rgl/debian-vagrant.
+# this uses the vagrant windows image imported from https://github.com/rgl/windows-vagrant.
 # see https://registry.terraform.io/providers/dmacvicar/libvirt/0.9.9/docs/resources/volume
 # see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.9.9/docs/resources/volume.md
 resource "libvirt_volume" "example_root" {
