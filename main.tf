@@ -411,6 +411,16 @@ resource "libvirt_domain" "example" {
         }
       }
     ]
+    tpms = [
+      {
+        model = "tpm-crb"
+        backend = {
+          emulator = {
+            version = "2.0"
+          }
+        }
+      }
+    ]
     disks = [
       {
         driver = {

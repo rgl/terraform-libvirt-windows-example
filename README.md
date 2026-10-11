@@ -53,6 +53,9 @@ pwsh
 Enter-PSSession -HostName "vagrant@$(terraform output --raw ip)"
 $PSVersionTable
 whoami /all
+Get-Tpm
+Get-TpmEndorsementKeyInfo
+Get-TpmSupportedFeature
 exit # Enter-PSSession
 exit # pwsh
 ```
