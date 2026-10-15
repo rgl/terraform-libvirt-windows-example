@@ -2,11 +2,11 @@
 
 # see https://github.com/PowerShell/PowerShell/releases
 # renovate: datasource=deb:microsoft depName=powershell extractVersion=^(?<version>7\.6\..+)-1\.deb$
-ARG POWERSHELL_VERSION='7.6.6'
+ARG POWERSHELL_VERSION='7.6.7'
 
 # see https://github.com/hashicorp/terraform/releases
 # renovate: datasource=github-releases depName=hashicorp/terraform
-ARG TERRAFORM_VERSION='1.16.5'
+ARG TERRAFORM_VERSION='1.16.6'
 
 # see https://github.com/devcontainers/images/tree/main/src/base-debian/manifest.json
 # see https://github.com/devcontainers/images/tree/main/src/base-debian/history
