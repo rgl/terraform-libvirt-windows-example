@@ -13,12 +13,12 @@ gitea_container_name="$(basename "$(dirname "$(realpath "${BASH_SOURCE[0]}")")")
 
 # see https://hub.docker.com/r/gitea/gitea/tags
 # renovate: datasource=docker depName=gitea/gitea
-gitea_version='28.1.0'
+gitea_version='28.2.0'
 
 # see https://hub.docker.com/r/renovate/renovate/tags
 # see https://github.com/renovatebot/renovate/releases
 # renovate: datasource=docker depName=renovate/renovate
-renovate_version='44.157.1'
+renovate_version='44.180.0'
 
 # clean.
 echo 'Deleting existing Gitea...'
@@ -30,7 +30,7 @@ install -d tmp
 # start gitea in background.
 # see https://docs.gitea.com/administration/config-cheat-sheet/
 # see https://github.com/go-gitea/gitea/releases
-# see https://github.com/go-gitea/gitea/blob/v28.1.0/docker/root/etc/s6/gitea/setup
+# see https://github.com/go-gitea/gitea/blob/v28.2.0/docker/root/etc/s6/gitea/setup
 echo 'Starting Gitea...'
 docker run \
     --detach \
